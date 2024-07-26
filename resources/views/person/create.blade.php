@@ -119,6 +119,18 @@
                             <x-input-error :messages="$errors->get('photo')" class="mt-2" />
                         </div>
 
+                        <!-- Employment Status (only visible for admin) -->
+                        @if (Auth::user()->hasRole('admin'))
+                            <div class="mt-4">
+                                <x-input-label for="approved" :value="__('Estado')" />
+                                <select id="approved" name="approved" class="block mt-1 w-full">
+                                    <option value="0">Inactivo</option>
+                                    <option value="1">Activo</option>
+                                </select>
+                                <x-input-error :messages="$errors->get('approved')" class="mt-2" />
+                            </div>
+                        @endif
+
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button class="ml-4">
                                 {{ __('Guardar') }}

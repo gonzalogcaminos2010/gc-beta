@@ -54,7 +54,10 @@
                         <td class="px-6 py-4">
                             <a href="{{ route('people.show', ['id' => $person->id]) }}" class="text-white bg-blue-500 hover:bg-blue-700 font-semibold py-1 px-2 rounded">Ver</a>
                             <a href="{{ route('people.edit', ['id' => $person->id]) }}" class="text-white bg-yellow-500 hover:bg-yellow-700 font-semibold py-1 px-2 rounded">Editar</a>
-                            <button wire:click="delete({{ $person->id }})" class="text-white bg-red-500 hover:bg-red-700 font-semibold py-1 px-2 rounded">Eliminar</button>
+                            <form method="POST" action="{{ route('people.destroy', ['id' => $person->id]) }}" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-white bg-red-500 hover:bg-red-700 font-semibold py-1 px-2 rounded">Eliminar</button>
                         </td>
                     </tr>
                 @endforeach

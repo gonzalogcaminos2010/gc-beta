@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\DocumentTypeController;
+use App\Http\Controllers\DocumentController;
 
 use App\Livewire\PersonTable; // Importar correctamente la clase PersonTable
 
@@ -26,7 +28,7 @@ Route::view('dashboard', 'dashboard')
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
-    
+
     Route::get('/people', [PersonController::class, 'index'])->name('people.index');
     Route::get('/people/create', [PersonController::class, 'create'])->name('people.create');
     Route::post('/people', [PersonController::class, 'store'])->name('people.store');
@@ -37,7 +39,11 @@ Route::view('profile', 'profile')
     Route::post('/people/{id}/approve', [PersonController::class, 'approve'])->name('people.approve');
     Route::get('/approved-people', [PersonController::class, 'approved'])->name('people.approved');
 
-    
+
+
+    Route::resource('document_types', DocumentTypeController::class);
+
+    Route::resource('documents', DocumentController::class);
     
 
 
