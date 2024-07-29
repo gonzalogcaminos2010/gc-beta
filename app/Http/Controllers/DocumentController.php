@@ -26,6 +26,7 @@ class DocumentController extends Controller
     }
 
     public function store(Request $request)
+<<<<<<< HEAD
     {
         $request->validate([
             'entity_type' => 'required|in:Person,Vehicle',
@@ -48,6 +49,30 @@ class DocumentController extends Controller
 
         return redirect()->route('documents.index')->with('success', 'Documento creado correctamente.');
     }
+=======
+{
+    $request->validate([
+        'entity_type' => 'required|in:Person,Vehicle',
+        'person_id' => 'nullable|exists:people,id',
+        'vehicle_id' => 'nullable|exists:vehicles,id',
+        'document_type_id' => 'required|exists:document_types,id',
+        'file' => 'required|file|mimes:pdf,jpg,jpeg,png',
+        'expiration_date' => 'nullable|date',
+    ]);
+
+    $filePath = $request->file('file')->store('documents');
+
+    Document::create([
+        'person_id' => $request->entity_type == 'Person' ? $request->person_id : null,
+        'vehicle_id' => $request->entity_type == 'Vehicle' ? $request->vehicle_id : null,
+        'document_type_id' => $request->document_type_id,
+        'file_path' => $filePath,
+        'expiration_date' => $request->expiration_date,
+    ]);
+
+    return redirect()->route('documents.index')->with('success', 'Documento creado correctamente.');
+}
+>>>>>>> 657f32a (hola)
 
     public function show(Document $document)
     {

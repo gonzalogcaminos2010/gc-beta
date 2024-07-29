@@ -44,6 +44,17 @@ Route::view('profile', 'profile')
     Route::resource('document_types', DocumentTypeController::class);
 
     Route::resource('documents', DocumentController::class);
+<<<<<<< HEAD
+=======
+    // Rutas para documentos de personas
+Route::resource('person_documents', PersonDocumentController::class);
+
+// Rutas para documentos de vehículos
+Route::resource('vehicle_documents', VehicleDocumentController::class);
+
+// Ruta para mostrar detalles de la persona
+Route::get('person/{id}', [PersonController::class, 'show'])->name('person.show');
+>>>>>>> 657f32a (hola)
     
 
 

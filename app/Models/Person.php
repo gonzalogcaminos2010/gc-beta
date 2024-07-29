@@ -31,4 +31,13 @@ class Person extends Model
         'part_time' => 'Part Time',
         'contract' => 'Contract'
     ];
+<<<<<<< HEAD
+=======
+
+     // Define the relationship with documents
+     public function documents()
+     {
+         return $this->hasMany(Document::class);
+     }
+>>>>>>> 657f32a (hola)
 }

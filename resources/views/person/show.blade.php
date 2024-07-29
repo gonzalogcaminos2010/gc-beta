@@ -1,3 +1,4 @@
+<<<<<<< HEAD
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -137,3 +138,150 @@
         </div>
     </body>
     </html>
+=======
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Detalles de la Persona') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
+                    <div class="mt-8 text-2xl flex items-center">
+                        @if($person->photo)
+                            <img src="{{ asset('storage/' . $person->photo) }}" alt="Foto de {{ $person->first_name }}" class="rounded-full w-32 h-32 object-cover mr-4">
+                        @else
+                            <img src="https://via.placeholder.com/150" alt="Foto de {{ $person->first_name }}" class="rounded-full w-32 h-32 object-cover mr-4">
+                        @endif
+                        <div>
+                            {{ $person->first_name }} {{ $person->last_name }}
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-gray-500">
+                        <p>DNI: {{ $person->dni }}</p>
+                        <p>CUIL: {{ $person->cuil }}</p>
+                        <p>Fecha de Nacimiento: {{ $person->birth_date }}</p>
+                        <p>Fecha de Alta: {{ $person->hire_date }}</p>
+                        <p>Dirección: {{ $person->address }}</p>
+                        <p>Ciudad: {{ $person->city }}</p>
+                        <p>Estado/Provincia: {{ $person->state }}</p>
+                        <p>País: {{ $person->country }}</p>
+                    </div>
+
+                    <div class="mt-6">
+                        <ul class="border-b flex">
+                            <li class="mr-1">
+                                <a class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold" href="#details">Detalles</a>
+                            </li>
+                            <li class="-mb-px mr-1">
+                                <a class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold" href="#documents">Documentos</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="details" class="tab-content mt-4">
+                        <div class="text-gray-500">
+                            <p><strong>Nombre:</strong> {{ $person->first_name }}</p>
+                            <p><strong>Apellido:</strong> {{ $person->last_name }}</p>
+                            <p><strong>DNI:</strong> {{ $person->dni }}</p>
+                            <p><strong>CUIL:</strong> {{ $person->cuil }}</p>
+                            <p><strong>Fecha de Nacimiento:</strong> {{ $person->birth_date }}</p>
+                            <p><strong>Fecha de Alta:</strong> {{ $person->hire_date }}</p>
+                            <p><strong>Dirección:</strong> {{ $person->address }}</p>
+                            <p><strong>Ciudad:</strong> {{ $person->city }}</p>
+                            <p><strong>Estado/Provincia:</strong> {{ $person->state }}</p>
+                            <p><strong>País:</strong> {{ $person->country }}</p>
+                        </div>
+                    </div>
+
+                    <div id="documents" class="tab-content mt-4 hidden">
+                        <div class="text-gray-500">
+                            <h3 class="font-semibold text-xl text-gray-800 leading-tight">Documentos</h3>
+                            <button onclick="openModal()" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Agregar</button>
+                            <div>
+                                @foreach ($documentTypes as $documentType)
+                                    <div class="mt-4 p-4 border border-gray-200 rounded">
+                                        <p>{{ $documentType->name }}</p>
+                                        @foreach ($person->documents->where('document_type_id', $documentType->id) as $document)
+                                            <div class="mt-2">
+                                                <a href="{{ route('documents.show', $document->id) }}" target="_blank">{{ $document->file_path }}</a>
+                                                <p>Fecha de Vencimiento: {{ $document->expiration_date }}</p>
+                                            </div>
+                                        @endforeach
+                                        <button onclick="openModal({{ $documentType->id }})" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">Cargar</button>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div x-data="{ showModal: false, documentTypeId: null }" x-show="showModal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div class="bg-white p-8 rounded shadow-xl">
+            <h2 class="text-2xl mb-4">Cargar Documento</h2>
+            <form method="POST" action="{{ route('documents.store') }}" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="person_id" value="{{ $person->id }}">
+                <input type="hidden" name="document_type_id" x-model="documentTypeId">
+
+                <div class="mt-4">
+                    <x-input-label for="file" :value="__('Archivo')" />
+                    <input id="file" class="block mt-1 w-full" type="file" name="file" required />
+                    <x-input-error :messages="$errors->get('file')" class="mt-2" />
+                </div>
+
+                <div class="mt-4">
+                    <x-input-label for="expiration_date" :value="__('Fecha de Vencimiento')" />
+                    <x-text-input id="expiration_date" class="block mt-1 w-full" type="date" name="expiration_date" />
+                    <x-input-error :messages="$errors->get('expiration_date')" class="mt-2" />
+                </div>
+
+                <div class="flex items-center justify-end mt-4">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-red-500 text-white rounded">Cancelar</button>
+                    <x-primary-button class="ml-4">
+                        {{ __('Guardar') }}
+                    </x-primary-button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal(documentTypeId = null) {
+            const alpineData = document.querySelector('[x-data]').__x.$data;
+            alpineData.showModal = true;
+            alpineData.documentTypeId = documentTypeId;
+        }
+
+        function closeModal() {
+            const alpineData = document.querySelector('[x-data]').__x.$data;
+            alpineData.showModal = false;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.border-b a');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = this.getAttribute('href').substring(1);
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    document.getElementById(target).classList.remove('hidden');
+                    tabs.forEach(t => t.classList.remove('border-b-2', 'border-blue-500'));
+                    this.classList.add('border-b-2', 'border-blue-500');
+                });
+            });
+        });
+    </script>
+</x-app-layout>
+>>>>>>> 657f32a (hola)

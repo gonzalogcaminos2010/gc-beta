@@ -58,6 +58,7 @@ class PersonController extends Controller
 
     public function show($id)
     {
+<<<<<<< HEAD
         $person = Person::findOrFail($id);
 
         // Convertir las fechas a instancias de Carbon si no son nulas
@@ -65,6 +66,12 @@ class PersonController extends Controller
         $person->hire_date = $person->hire_date ? Carbon::parse($person->hire_date) : null;
     
         return view('person.show', compact('person'));
+=======
+        $person = Person::with('documents.documentType')->findOrFail($id);
+        $documentTypes = DocumentType::where('entity_type', 'Person')->get();
+
+        return view('person.show', compact('person', 'documentTypes'));
+>>>>>>> 657f32a (hola)
     }
 
 
